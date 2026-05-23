@@ -2,7 +2,7 @@
 
 > A practical, professional reference for using **WinDbg** while studying the **Malware analysis ** and **EDR Internals **.
 >
-> This cheatsheet is written from zero — no prior WinDbg experience assumed — but assumes you already know what malware analysis, EDR, and basic Windows internals are. Each section explains *what* a command does, *why* you'd use it in offensive/defensive research, and *how* to combine it with real malware analysis workflows.
+> This cheatsheet is written from zero  no prior WinDbg experience assumed  but assumes you already know what malware analysis, EDR, and basic Windows internals are. Each section explains *what* a command does, *why* you'd use it in offensive/defensive research, and *how* to combine it with real malware analysis workflows.
 
 ---
 
@@ -16,7 +16,7 @@
 6. [Process & Thread Inspection](#process-thread)
 7. [Memory Examination](#memory)
 8. [Disassembly & Code Analysis](#disasm)
-9. [Breakpoints — Software, Hardware, Conditional](#breakpoints)
+9. [Breakpoints  Software, Hardware, Conditional](#breakpoints)
 10. [Execution Control](#execution)
 11. [Stack Analysis](#stack)
 12. [Modules, Symbols & Exports](#modules)
@@ -44,7 +44,7 @@
 <a name="why-windbg"></a>
 ## 1. Why WinDbg for blacksunCUBE & EDR Research
 
-WinDbg is **the** debugger when you need to see what Windows is *actually* doing — not what user-mode APIs claim is happening. For blacksunCUBE     , this matters in two specific ways:
+WinDbg is **the** debugger when you need to see what Windows is *actually* doing  not what user-mode APIs claim is happening. For blacksunCUBE     , this matters in two specific ways:
 
 **As a malware analisyseloper (offensive perspective):**
 - Verify your payloads behave as expected at the syscall/NTAPI level
@@ -128,7 +128,7 @@ lm                                  ; list modules
 lm v m ntdll                        ; verbose info on ntdll, including symbol status
 ```
 
-If you see `(deferred)` next to a module, symbols haven't been loaded yet — they will load on demand or when you `.reload /f` it.
+If you see `(deferred)` next to a module, symbols haven't been loaded yet  they will load on demand or when you `.reload /f` it.
 
 ---
 
@@ -163,7 +163,7 @@ windbg <path_to_exe>            ; launch and debug from start
 <a name="syntax"></a>
 ## 5. Essential Command Syntax
 
-WinDbg has three command types — learn to distinguish them:
+WinDbg has three command types  learn to distinguish them:
 
 | Prefix | Type | Examples |
 |--------|------|----------|
@@ -235,7 +235,7 @@ kd> !peb                            ; inspect its PEB
 <a name="memory"></a>
 ## 7. Memory Examination
 
-The `d` (display) family — your most-used commands. Each shows memory in a different format.
+The `d` (display) family  your most-used commands. Each shows memory in a different format.
 
 | Command | Format | Example |
 |---------|--------|---------|
@@ -262,7 +262,7 @@ s -a 0 L?80000000 "Mozilla"                     ; search a Firefox-like UA acros
 s -b ntdll L?ntdll "4c 8b d1 b8"                ; classic x64 syscall stub prologue
 ```
 
-### Editing Memory (Dangerous — Use Only When Necessary)
+### Editing Memory (Dangerous  Use Only When Necessary)
 
 ```
 eb <addr> <byte>...                 ; edit bytes
@@ -282,7 +282,7 @@ Editing memory is useful for **patching out anti-debug checks** or **flipping a 
 !vad                                ; (kernel) VAD tree of current process
 ```
 
-`!address` is invaluable for confirming whether an allocation is `MEM_PRIVATE` vs `MEM_IMAGE` — a critical distinction when EDRs flag suspicious `RWX` private memory.
+`!address` is invaluable for confirming whether an allocation is `MEM_PRIVATE` vs `MEM_IMAGE`  a critical distinction when EDRs flag suspicious `RWX` private memory.
 
 ---
 
@@ -321,7 +321,7 @@ If you see `E9 ?? ?? ?? ??` (a `JMP` rel32) at the function start instead of `4C
 ---
 
 <a name="breakpoints"></a>
-## 9. Breakpoints — Software, Hardware, Conditional
+## 9. Breakpoints  Software, Hardware, Conditional
 
 ### Software Breakpoints (most common)
 
@@ -329,13 +329,13 @@ If you see `E9 ?? ?? ?? ??` (a `JMP` rel32) at the function start instead of `4C
 bp <addr>                           ; breakpoint at address
 bp <module>!<function>              ; symbolic breakpoint
 bp ntdll!NtCreateFile               ; break on NtCreateFile
-bu <module>!<function>              ; deferred — fires when module loads
+bu <module>!<function>              ; deferred  fires when module loads
 bp /1 <addr>                        ; one-shot breakpoint (auto-deletes)
 bp /p <EPROCESS> <addr>             ; (kernel) only for this process
 bp /t <ETHREAD> <addr>              ; (kernel) only for this thread
 ```
 
-`bu` is essential when targeting code that **isn't loaded yet** — for example, when you want to break inside a DLL that the loader will pull in after a syscall.
+`bu` is essential when targeting code that **isn't loaded yet**  for example, when you want to break inside a DLL that the loader will pull in after a syscall.
 
 ### Hardware Breakpoints (Data Breakpoints / Watchpoints)
 
@@ -391,7 +391,7 @@ For blacksunCUBE work, this lets you turn WinDbg into a poor-man's API monitor.
 |---------|--------|
 | `g` | Go (continue) |
 | `g <addr>` | Go until address |
-| `gu` | Go up — run until current function returns |
+| `gu` | Go up  run until current function returns |
 | `gh` | Go with exception handled |
 | `gn` | Go with exception not handled |
 | `p` | Step over (one instruction, skipping calls) |
@@ -399,9 +399,9 @@ For blacksunCUBE work, this lets you turn WinDbg into a poor-man's API monitor.
 | `pt` | Step to next return |
 | `t` | Step into |
 | `tc` | Trace to next call |
-| `wt` | Watch and trace — log every function called |
+| `wt` | Watch and trace  log every function called |
 
-`wt` produces a massive but informative log — perfect for understanding what a small piece of code does internally.
+`wt` produces a massive but informative log  perfect for understanding what a small piece of code does internally.
 
 ---
 
@@ -412,7 +412,7 @@ For blacksunCUBE work, this lets you turn WinDbg into a poor-man's API monitor.
 k                                   ; basic call stack
 kn                                  ; with frame numbers
 kb                                  ; with first 3 arguments
-kv                                  ; verbose — includes calling conv & FPO data
+kv                                  ; verbose  includes calling conv & FPO data
 kp                                  ; with full parameters (needs private symbols)
 kP                                  ; same as kp but on separate lines
 .frame <n>                          ; switch to frame n
@@ -428,7 +428,7 @@ x64 Windows calling convention: first four args in `rcx`, `rdx`, `r8`, `r9`. Sta
 0:000> dq /c1 rsp L8                ; show 8 stack slots, one per line
 ```
 
-When you break inside a function, dump `rcx` first — it's usually the most interesting argument (handle, pointer, filename, etc.).
+When you break inside a function, dump `rcx` first  it's usually the most interesting argument (handle, pointer, filename, etc.).
 
 ---
 
@@ -440,7 +440,7 @@ lm                                  ; list loaded modules
 lm m kernel*                        ; filter by name pattern
 lm a <addr>                         ; module containing this address
 lm Dv m ntdll                       ; detailed verbose info about ntdll
-ln <addr>                           ; nearest symbol to address — great for "where am I?"
+ln <addr>                           ; nearest symbol to address  great for "where am I?"
 x <module>!<pattern>                ; search symbols
 x ntdll!Nt*                         ; list every Nt* function in ntdll
 !dh <base_addr>                     ; parse PE headers
@@ -455,7 +455,7 @@ lmDvm <module>                      ; detailed info: version, path, timestamp
 !dh <base>                          ; check headers (entry point, section flags)
 ```
 
-Useful for catching **reflectively loaded DLLs** — they often won't appear in `lm` unless properly linked into the PEB loader list.
+Useful for catching **reflectively loaded DLLs**  they often won't appear in `lm` unless properly linked into the PEB loader list.
 
 ---
 
@@ -484,7 +484,7 @@ bp $t0                              ; break there
 ?? @$t0                             ; read it back
 ```
 
-`$t0`–`$t9` are user pseudo-registers — handy for keeping a target address around between commands.
+`$t0`–`$t9` are user pseudo-registers  handy for keeping a target address around between commands.
 
 ---
 
@@ -522,9 +522,9 @@ File → Start Debugging → Attach to Kernel → COM
   Port:         \\.\pipe\com_1
 ```
 
-### Hyper-V (KDNET — Faster)
+### Hyper-V (KDNET  Faster)
 
-On Hyper-V, use **network kernel debugging** instead of serial — it's dramatically faster.
+On Hyper-V, use **network kernel debugging** instead of serial  it's dramatically faster.
 
 ```cmd
 bcdedit /debug on
@@ -536,7 +536,7 @@ Then on the host:
 windbg -k net:port=50000,key=<random.key.value.here>
 ```
 
-### First Connection — Disable Driver Signing for Test Drivers
+### First Connection  Disable Driver Signing for Test Drivers
 
 If you're developing a custom EDR driver (or studying one), you must disable Driver Signature Enforcement on the debugee:
 
@@ -561,9 +561,9 @@ Ctrl+Break                          ; break in (kernel debugging)
 <a name="structures"></a>
 ## 15. Kernel Structures (EPROCESS, ETHREAD, PEB, TEB)
 
-These structures are the *core* of Windows internals — and the playground for both malware and EDRs.
+These structures are the *core* of Windows internals  and the playground for both malware and EDRs.
 
-### EPROCESS — The Kernel View of a Process
+### EPROCESS  The Kernel View of a Process
 
 ```
 dt nt!_EPROCESS                     ; show structure layout (just types)
@@ -578,13 +578,13 @@ Fields of high interest:
 |-------|----------------|
 | `ImageFileName` | Process name (ANSI, max 15 chars) |
 | `UniqueProcessId` | PID |
-| `Pcb.DirectoryTableBase` | CR3 value — page table base |
+| `Pcb.DirectoryTableBase` | CR3 value  page table base |
 | `Token` | Security token pointer |
 | `Protection` | PPL level (Protected Process Light) |
 | `ObjectTable` | Handle table |
 | `Peb` | User-mode PEB pointer |
 | `SectionObject` | Image section |
-| `InheritedFromUniqueProcessId` | Parent PID — useful for parent spoofing detection |
+| `InheritedFromUniqueProcessId` | Parent PID  useful for parent spoofing detection |
 
 ### ETHREAD
 
@@ -594,9 +594,9 @@ dt nt!_KTHREAD <addr>               ; the KTHREAD substructure
 ```
 
 Key fields:
-- `Cid.UniqueThread` — TID
-- `StartAddress` — initial thread start address (kernel-set)
-- `Win32StartAddress` — actual user-mode start address — **EDRs check this for thread injection**
+- `Cid.UniqueThread`  TID
+- `StartAddress`  initial thread start address (kernel-set)
+- `Win32StartAddress`  actual user-mode start address  **EDRs check this for thread injection**
 
 ### PEB (Process Environment Block)
 
@@ -607,9 +607,9 @@ dt nt!_PEB @$peb                    ; current process PEB
 ```
 
 Critical fields for blacksunCUBE:
-- `Ldr` → `_PEB_LDR_DATA` → InMemoryOrderModuleList — **modify this for module hiding**
-- `BeingDebugged` — anti-debug flag, easy to patch
-- `NtGlobalFlag` — anti-debug, holds debug heap flags
+- `Ldr` → `_PEB_LDR_DATA` → InMemoryOrderModuleList  **modify this for module hiding**
+- `BeingDebugged`  anti-debug flag, easy to patch
+- `NtGlobalFlag`  anti-debug, holds debug heap flags
 - `ProcessParameters` → `ImagePathName`, `CommandLine`, `CurrentDirectory`
 
 ### TEB (Thread Environment Block)
@@ -620,9 +620,9 @@ dt nt!_TEB @$teb
 ```
 
 Critical for malware:
-- `NtTib.Self` — pointer to itself (anti-debug check: validate via `gs:[0x30]` on x64)
-- `LastErrorValue` — last error code
-- `StackBase`, `StackLimit` — for stack pivot detection
+- `NtTib.Self`  pointer to itself (anti-debug check: validate via `gs:[0x30]` on x64)
+- `LastErrorValue`  last error code
+- `StackBase`, `StackLimit`  for stack pivot detection
 
 ---
 
@@ -646,7 +646,7 @@ kd> dt nt!_EPROCESS <addr> Token    ; get its token
 kd> !token <token_addr>             ; inspect privileges
 ```
 
-If a non-system process suddenly has LSASS-like privileges, you're likely looking at a **token theft / token duplication** attack — covered extensively in blacksunCUBE  .
+If a non-system process suddenly has LSASS-like privileges, you're likely looking at a **token theft / token duplication** attack  covered extensively in blacksunCUBE  .
 
 ---
 
@@ -657,7 +657,7 @@ For EDR Internals work, you constantly need to inspect drivers, their devices, a
 
 ```
 !drvobj <driver_name>               ; basic driver info
-!drvobj <driver_name> 7             ; verbose — shows all dispatch routines and devices
+!drvobj <driver_name> 7             ; verbose  shows all dispatch routines and devices
 !devobj <device_addr>               ; device object details
 !devstack <device_addr>             ; full device stack (top to bottom)
 !devnode 0 1                        ; device tree (PnP)
@@ -694,7 +694,7 @@ This is essential for understanding **how an EDR driver routes IRPs** and where 
 !fltkd.volumes                      ; volumes being filtered
 ```
 
-`fltkd` is the filter manager extension — load it with `.load fltkd` if it's not active.
+`fltkd` is the filter manager extension  load it with `.load fltkd` if it's not active.
 
 ---
 
@@ -729,7 +729,7 @@ kd> dps nt!PspLoadImageNotifyRoutine L40
 
 ### Object Callbacks (ObRegisterCallbacks)
 
-These are used to filter handle operations on processes and threads — for example, to prevent dumping LSASS.
+These are used to filter handle operations on processes and threads  for example, to prevent dumping LSASS.
 
 ```
 kd> !object \ObjectTypes\Process
@@ -753,7 +753,7 @@ For **EDR Internals**   : knowing how to enumerate, identify, and analyze every 
 <a name="hooks"></a>
 ## 19. Tracking API Hooks & Inline Patches
 
-User-mode hooks are the bread and butter of legacy EDRs — and the focus of half the blacksunCUBE unhooking modules.
+User-mode hooks are the bread and butter of legacy EDRs  and the focus of half the blacksunCUBE unhooking modules.
 
 ### Quick Hook Detection
 
@@ -778,7 +778,7 @@ A pristine x64 stub starts with `4C 8B D1` (`mov r10, rcx`). If you see `E9 ?? ?
 0:000> .foreach (func {x /1 ntdll!Nt*}) { db ${func} L4 }
 ```
 
-Iterates every `Nt*` export and dumps its first 4 bytes — a quick way to spot all hooked functions at once.
+Iterates every `Nt*` export and dumps its first 4 bytes  a quick way to spot all hooked functions at once.
 
 ---
 
@@ -805,16 +805,16 @@ Several blacksunCUBE modules cover process injection. Here's how to verify your 
 
 ```
 0:000> bp ntdll!NtCreateThreadEx
-; when hit, r9 holds StartRoutine — note it down
+; when hit, r9 holds StartRoutine  note it down
 ```
 
-### From the Kernel — Watch Cross-Process Writes
+### From the Kernel  Watch Cross-Process Writes
 
 ```
 kd> bp nt!NtWriteVirtualMemory ".if (@rcx != -1) {!process @rcx 0; .echo ----; !process -1 0} .else {gc}"
 ```
 
-This logs both the target and the source process for every cross-process write — exactly the signal an EDR would tap.
+This logs both the target and the source process for every cross-process write  exactly the signal an EDR would tap.
 
 ---
 
@@ -925,7 +925,7 @@ A core blacksunCUBE workflow: decrypt a payload in memory, dump it to disk for s
 .writemem C:\payload.bin <start> L?<size>       ; with explicit size
 ```
 
-Example — dumping a freshly decrypted shellcode buffer:
+Example  dumping a freshly decrypted shellcode buffer:
 
 ```
 0:000> bp ntdll!NtProtectVirtualMemory          ; break when payload is being made executable
@@ -970,9 +970,9 @@ kv                                   ; stack of the crashing thread
 ```
 
 Common bugchecks when developing drivers:
-- `0xD1` (`DRIVER_IRQL_NOT_LESS_OR_EQUAL`) — touching paged memory at high IRQL
-- `0x7E` (`SYSTEM_THREAD_EXCEPTION_NOT_HANDLED`) — unhandled exception in your code
-- `0xC4` (`DRIVER_VERIFIER_DETECTED_VIOLATION`) — Driver Verifier caught you
+- `0xD1` (`DRIVER_IRQL_NOT_LESS_OR_EQUAL`)  touching paged memory at high IRQL
+- `0x7E` (`SYSTEM_THREAD_EXCEPTION_NOT_HANDLED`)  unhandled exception in your code
+- `0xC4` (`DRIVER_VERIFIER_DETECTED_VIOLATION`)  Driver Verifier caught you
 
 **Always run your driver under Driver Verifier** during analysis:
 
@@ -985,7 +985,7 @@ verifier /standard /driver YourDriver.sys
 <a name="ttd"></a>
 ## 25. Time Travel Debugging (TTD)
 
-TTD is a killer feature of modern WinDbg — it records the execution of a process and lets you step backwards.
+TTD is a killer feature of modern WinDbg  it records the execution of a process and lets you step backwards.
 
 ### Recording
 
@@ -1014,7 +1014,7 @@ Open the `.run` file in WinDbg. Now you can:
 
 You can record a malware execution **once** and then explore every code path, every memory write, and every API call backwards in time. No more "I missed the breakpoint and have to restart."
 
-Query example — find every call to `NtAllocateVirtualMemory` and inspect the protect flag:
+Query example  find every call to `NtAllocateVirtualMemory` and inspect the protect flag:
 
 ```
 dx -g @$cursession.TTD.Calls("ntdll!NtAllocateVirtualMemory").Select(c => new { Pos = c.TimeStart, Protect = c.Parameters[3] })
@@ -1148,7 +1148,7 @@ kd> dps nt!PspLoadImageNotifyRoutine L40
 kd> dps nt!CmpCallBackVector L40
 ```
 
-For each non-null entry, `ln` it to identify which driver owns the callback. Build a table — that's your map of installed EDR/AV sensors.
+For each non-null entry, `ln` it to identify which driver owns the callback. Build a table  that's your map of installed EDR/AV sensors.
 
 ### Identifying ObRegisterCallbacks Entries for Process Object
 
@@ -1181,7 +1181,7 @@ kd> bp nt!EtwTiLogAllocExecVm        ; RWX allocations
 kd> bp nt!EtwTiLogProtectExecVm      ; RX/RWX transitions
 ```
 
-These are *exactly* the kernel functions the EDR Internals  teaches you to understand — and that malware developers learn to avoid triggering.
+These are *exactly* the kernel functions the EDR Internals  teaches you to understand  and that malware developers learn to avoid triggering.
 
 ### Identifying PPL-Protected Processes
 
@@ -1202,7 +1202,7 @@ The `Type` and `Signer` fields tell you whether a process is PPL, full PP, and w
 | Problem | Fix |
 |---------|-----|
 | `***  ERROR: Module load completed but symbols could not be loaded` | `.reload /f`. Check `.sympath`. Verify internet access for symbol server. |
-| Breakpoints don't fire | Module not loaded yet — use `bu` instead of `bp` (deferred). Or `sxe ld <module>` to break on load. |
+| Breakpoints don't fire | Module not loaded yet  use `bu` instead of `bp` (deferred). Or `sxe ld <module>` to break on load. |
 | Numbers don't match expectations | Remember: everything is hex by default. Use `0n` prefix for decimal. |
 | `Source not available` | You don't have the source code (normal for closed-source). Use `u` to disassemble. |
 | `WinDbg is unresponsive` | The debugee is running freely. Press Ctrl+Break (kernel) or Debug → Break. |
@@ -1237,7 +1237,7 @@ A few principles to keep in mind throughout both s:
 1. **Always work in an isolated, snapshotted VM.** Never debug live samples on your daily-driver machine.
 2. **Symbols make or break your investigation.** Spend the 10 minutes to set up `_NT_SYMBOL_PATH` properly once.
 3. **Learn to read x64 calling convention by sight** (rcx, rdx, r8, r9 + shadow space). It will save you hours.
-4. **The data model (dx) and TTD are 10x productivity gains.** Invest the time to learn them — the rest of the cheatsheet becomes leverage on top of those two.
+4. **The data model (dx) and TTD are 10x productivity gains.** Invest the time to learn them  the rest of the cheatsheet becomes leverage on top of those two.
 5. **Kernel debugging looks intimidating but is just user-mode with more context.** The commands are nearly identical; you just have access to every process, not one.
 
 Good hunting  and remember, the only ethical way to use any of this is on systems you own or have explicit written authorization to test.
