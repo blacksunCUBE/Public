@@ -1,6 +1,6 @@
 # WinDbg Cheatsheet for Malware analysis & EDR Research
 
-> A practical, professional reference for using **WinDbg** while studying the **Malware analysis ** and **EDR Internals **.
+> A practical, professional reference for using **WinDbg** while studying the **Malware analysis** and **EDR Internals**.
 >
 > This cheatsheet is written from zero  no prior WinDbg experience assumed  but assumes you already know what malware analysis, EDR, and basic Windows internals are. Each section explains *what* a command does, *why* you'd use it in offensive/defensive research, and *how* to combine it with real malware analysis workflows.
 
